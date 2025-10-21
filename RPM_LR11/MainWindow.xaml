@@ -1,0 +1,25 @@
+﻿<Window x:Class="LR9_RPM.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LR9_RPM"
+        mc:Ignorable="d"
+        Title="Просмотр видео"
+        Width="1200" Height="800"
+        Background="#222">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <WrapPanel x:Name="VideoWrap"
+                   Margin="20 70 20 20"
+                   HorizontalAlignment="Center">
+            <local:MyVideoBlock />
+            <local:MyVideoBlock />
+            <local:MyVideoBlock />
+            <local:MyVideoBlock />
+            <local:MyVideoBlock />
+            <local:MyVideoBlock />
+            <local:MyVideoBlock />
+            <local:MyVideoBlock />
+        </WrapPanel>
+    </ScrollViewer>
+</Window>

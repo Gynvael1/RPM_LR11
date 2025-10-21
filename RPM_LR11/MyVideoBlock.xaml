@@ -1,0 +1,127 @@
+﻿<UserControl x:Class="LR9_RPM.MyVideoBlock"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="400" d:DesignWidth="600">
+    <UserControl.Resources>
+        <Storyboard x:Key="RotateLeftStoryboard">
+            <DoubleAnimation Storyboard.TargetName="VideoRotate"
+                             Storyboard.TargetProperty="Angle"
+                             By="-90" Duration="0:0:0.2"/>
+        </Storyboard>
+        <Storyboard x:Key="RotateRightStoryboard">
+            <DoubleAnimation Storyboard.TargetName="VideoRotate"
+                             Storyboard.TargetProperty="Angle"
+                             By="90" Duration="0:0:0.2"/>
+        </Storyboard>
+        <Storyboard x:Key="HoverEnterStoryboard">
+            <DoubleAnimation Storyboard.TargetName="Scale"
+                             Storyboard.TargetProperty="ScaleX"
+                             To="1.4" Duration="0:0:0.25"/>
+            <DoubleAnimation Storyboard.TargetName="Scale"
+                             Storyboard.TargetProperty="ScaleY"
+                             To="1.4" Duration="0:0:0.25"/>
+            <DoubleAnimation Storyboard.TargetName="InnerPanel"
+                             Storyboard.TargetProperty="Effect.(BlurEffect.Radius)"
+                             To="0" Duration="0:0:0.25"/>
+            <DoubleAnimation Storyboard.TargetName="OuterPanel"
+                             Storyboard.TargetProperty="Effect.(DropShadowEffect.Opacity)"
+                             To="0.85" Duration="0:0:0.25"/>
+        </Storyboard>
+        <Storyboard x:Key="HoverLeaveStoryboard">
+            <DoubleAnimation Storyboard.TargetName="Scale"
+                             Storyboard.TargetProperty="ScaleX"
+                             To="0.85" Duration="0:0:0.25"/>
+            <DoubleAnimation Storyboard.TargetName="Scale"
+                             Storyboard.TargetProperty="ScaleY"
+                             To="0.85" Duration="0:0:0.25"/>
+            <DoubleAnimation Storyboard.TargetName="InnerPanel"
+                             Storyboard.TargetProperty="Effect.(BlurEffect.Radius)"
+                             To="8" Duration="0:0:0.25"/>
+            <DoubleAnimation Storyboard.TargetName="OuterPanel"
+                             Storyboard.TargetProperty="Effect.(DropShadowEffect.Opacity)"
+                             To="0" Duration="0:0:0.25"/>
+        </Storyboard>
+    </UserControl.Resources>
+    <Border x:Name="OuterPanel"
+            Margin="20"
+            Background="#333"
+            CornerRadius="10"
+            RenderTransformOrigin="0.5,0.5"
+            SnapsToDevicePixels="True"
+            Padding="10">
+        <Border.RenderTransform>
+            <ScaleTransform x:Name="Scale" ScaleX="0.85" ScaleY="0.85"/>
+        </Border.RenderTransform>
+        <Border.Effect>
+            <DropShadowEffect Color="Red" Opacity="0" BlurRadius="20" ShadowDepth="5" Direction="135"/>
+        </Border.Effect>
+        <StackPanel x:Name="InnerPanel" RenderTransformOrigin="0.5,0.5">
+            <StackPanel.Effect>
+                <BlurEffect Radius="8"/>
+            </StackPanel.Effect>
+            <Button x:Name="LoadButton"
+                    Content="Выбрать видео"
+                    Width="180" Height="28"
+                    Margin="0,0,0,10"
+                    Background="LightSteelBlue"
+                    Click="LoadButton_Click"/>
+            <Grid Width="320" Height="320">
+                <Rectangle x:Name="Placeholder" Fill="LightGray" RadiusX="4" RadiusY="4"/>
+                <MediaElement x:Name="MyVideo"
+                              Width="320" Height="220"
+                              LoadedBehavior="Manual"
+                              Stretch="Uniform"
+                              Visibility="Collapsed"
+                              RenderTransformOrigin="0.5,0.5">
+                    <MediaElement.RenderTransform>
+                        <RotateTransform x:Name="VideoRotate" Angle="0"/>
+                    </MediaElement.RenderTransform>
+                </MediaElement>
+            </Grid>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,5">
+                <Button x:Name="btnLeft" Width="50" Height="35" Content="⟲" Background="LightGreen">
+                    <Button.Triggers>
+                        <EventTrigger RoutedEvent="Button.Click">
+                            <BeginStoryboard Storyboard="{StaticResource RotateLeftStoryboard}"/>
+                        </EventTrigger>
+                    </Button.Triggers>
+                </Button>
+                <Button x:Name="btnRight" Width="50" Height="35" Content="⟳" Margin="20,0,0,0" Background="LightGreen">
+                    <Button.Triggers>
+                        <EventTrigger RoutedEvent="Button.Click">
+                            <BeginStoryboard Storyboard="{StaticResource RotateRightStoryboard}"/>
+                        </EventTrigger>
+                    </Button.Triggers>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
+                <Button x:Name="btnPlay" Width="60" Height="30" Content="▶" Click="btnPlay_Click" Margin="0,0,5,0"/>
+                <Button x:Name="btnPause" Width="60" Height="30" Content="⏸" Click="btnPause_Click" Margin="0,0,5,0"/>
+                <Button x:Name="btnStop" Width="60" Height="30" Content="⏹" Click="btnStop_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+    <UserControl.Style>
+        <Style TargetType="UserControl">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Panel.ZIndex" Value="99"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="False">
+                    <Setter Property="Panel.ZIndex" Value="1"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Style>
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="MouseEnter">
+            <BeginStoryboard Storyboard="{StaticResource HoverEnterStoryboard}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="MouseLeave">
+            <BeginStoryboard Storyboard="{StaticResource HoverLeaveStoryboard}"/>
+        </EventTrigger>
+    </UserControl.Triggers>
+</UserControl>
